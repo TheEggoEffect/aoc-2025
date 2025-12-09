@@ -62,7 +62,5 @@ for i in range(len(ids)):
         if w == ids[i]:
             inval += int(ids[i])
             break
-#Runs through the list of IDs, calculating the factors of each ID's length. Takes all series of numbers whose lengths are one of these factors (as these
-#are the chunks that can be copied to fill the entire ID). Then, check if an ID filled with copied chunks is the same as the ID itself, and adds this to
-#the total. 
+#Runs through the list of IDs, calculating the factors of each ID's length. Takes all series of numbers whose lengths are one of these factors (as these are the chunks that can be copied to fill the entire ID). Then, check if an ID filled with copied chunks is the same as the ID itself, and adds this to the total. 
 print(inval)
