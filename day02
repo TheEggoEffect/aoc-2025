@@ -1,0 +1,68 @@
+#My method for part 1:
+file = open("aoc2025 day 2 input.txt")
+a = file.read()
+file.close()
+a = a.replace("-", ",")
+a = a.split(",")
+#Opens text file and reads it as a string, then takes the string apart into individual number strings for manipulation
+
+ids = []
+for i in range(len(a) // 2):
+    lo = int(a[2 * i])
+    hi = int(a[(2 * i) + 1])
+    inc = lo
+    while inc != hi + 1:
+        ids.append(str(inc))
+        inc += 1
+#Takes each pair of IDs (representing upper and lower bounds) and appends every integer between them into a master list of IDs
+
+inval = 0
+for i in range(len(ids)): 
+    l = ids[i][:len(ids[i])//2].split(" ")
+    r = ids[i][len(ids[i])//2:].split(" ")
+    if l == r:
+        inval += int(ids[i])
+print(inval)
+#Runs through the list of ID strings, splitting each one in half. If the left and right halves are the same number, adds that ID to the total.
+
+							 
+#My method for part 2:
+file = open("aoc2025 day 2 input.txt")
+a = file.read()
+file.close()
+a = a.replace("-", ",")
+a = a.split(",")
+#Opens text file and reads it as a string, then takes the string apart into individual number strings for manipulation
+
+ids = []
+for i in range(len(a) // 2):
+    lo = int(a[2 * i])
+    hi = int(a[(2 * i) + 1])
+    inc = lo
+    while inc != hi + 1:
+        ids.append(str(inc))
+        inc += 1
+#Takes each pair of IDs (representing upper and lower bounds) and appends every integer between them into a master list of IDs
+
+def factors(n):
+    f = []
+    for i in range(1, n // 2 + 1):
+        if n % i == 0:
+            f.append(i)
+    return f
+#Returns a list containing the factors of an integer, up to half the integer (since the below doesn't work for f > n/2)
+
+inval = 0
+for i in range(len(ids)):
+    f = factors(len(ids[i]))
+    for j in range(len(f)):
+        u = ids[i][:f[j]].split(" ")[0]
+        q = len(ids[i]) // f[j]
+        w = u * q
+        if w == ids[i]:
+            inval += int(ids[i])
+            break
+#Runs through the list of IDs, calculating the factors of each ID's length. Takes all series of numbers whose lengths are one of these factors (as these
+#are the chunks that can be copied to fill the entire ID). Then, check if an ID filled with copied chunks is the same as the ID itself, and adds this to
+#the total. 
+print(inval)
