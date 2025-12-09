@@ -1,0 +1,101 @@
+#My method for part 1:
+
+#You know what this does
+file = open("aoc2025 day 6 input.txt")
+inp = file.read()
+file.close()
+inp = inp.split("\n")
+for i in range(len(inp)):
+    inp[i] = inp[i].split(" ")
+    while "" in inp[i]:
+        inp[i].remove("")
+
+#Rearranges each line of the problem so everything is in the same list
+problems = []
+for i in range(len(inp[0])):
+    line = []
+    for j in inp:
+        line.append(j[i])
+    problems.append(line)
+
+#My attempts to convert all strings representing ints into ints back in the beginning failed, so here's a custom sum(list) function that works with strings. (I would've had to make one for product(list) anyways)
+def sum(x):
+    s = 0
+    for i in x:
+        s += int(i)
+    return s
+def product(x):
+    p = 1
+    for i in x:
+        p *= int(i)
+    return p
+
+#Goes through each problem, adding either the sum or product of every number in the problem to a running total, depending on if a + or * is indicated
+total = 0
+for i in problems:
+    if i[-1] == "+":
+        total += sum(i[:-1])
+    if i[-1] == "*":
+        total += product(i[:-1])
+
+print(total)
+
+
+#My method for part 2:
+
+#You know what this does
+file = open("aoc2025 day 6 input.txt")
+inp = file.read()
+file.close()
+inp = inp.split("\n")
+
+#We're going to go through each column of the input, removing the column we just did
+total = 0
+while len(inp[0]) != 0:
+    #We'll need to know whether we're doing multiplication or addition; this grabs the first character in the final row (which represents the operation), as well as finding the width of the column by checking the space between this operation character and the next. 
+    ops = inp[-1]
+    last = [ops[0]]
+    for j in ops[1:]:
+        if j == "*" or j == "+":
+            last.pop()
+            break
+        last.append(j)
+    if last [0] == "+":
+        op = 0
+    else:
+        op = 1
+    width = len(last)
+
+    #Isolates the numbers in the column
+    column = []
+    for j in inp[:-1]:
+        row = []
+        for k in j[0:width]:
+            if k == " ":
+                row.append(k)
+            else:
+                row.append(int(k))
+        column.append(row)
+
+    #Runs through the "column" list, determining the addends/products by reading the nth digit in each column. Adds/multiplies them together, then adds this to a running total.
+    k = 0
+    num = op
+    while k != width:
+        exp = 0
+        inc = 0
+        for j in range(len(column)-1, -1, -1):
+            if column[j][k] != " ":
+                inc += column[j][k] * 10**exp
+                exp += 1
+        if op == 0:
+            num += inc
+        if op == 1:
+            num *= inc
+        k += 1
+    total += num
+
+    #Removes the column we just dealt with
+    for i in range(len(inp)):
+        inp[i] = inp[i][width + 1:]
+    
+print(total)
