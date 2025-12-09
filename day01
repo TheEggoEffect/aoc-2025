@@ -1,0 +1,77 @@
+#My method for part 1:
+file = open("aoc2025 day 1 input.txt")
+a = file.read()
+file.close()
+
+a = a.replace("L", "-")
+a = a.replace("R", "")
+a = a.split("\n")
+for i in range(len(a)):
+    a[i] = int(a[i])
+
+dial = 50
+total = 0
+step = 0
+for i in range(len(a)):
+    step += 1
+    inc = a[i] % 100
+    
+    dial += inc
+    if dial >= 100:
+        dial -= 100
+    if dial < 0:
+        dial += 100
+    if dial == 0:
+        total += 1
+total, dial, step
+
+
+#My method for part 2:
+file = open("aoc2025 day 1 input.txt")
+a = file.read()
+file.close()
+#Opens txt file and reads it as a string
+
+a = a.replace("L", "-")
+a = a.replace("R", "")
+a = a.split("\n")
+for i in range(len(a)):
+    a[i] = int(a[i])
+#Converts txt string into a list of integers representing left (negative) or right (positive) turns
+
+dial = 50
+prev = 50
+total = 0
+step = 0
+for i in range(len(a)):
+    step += 1
+    total += abs(a[i]) // 100
+    #If |inc| > 100, adds however many full rotations to total
+    if a[i] < 0:
+    #FUCK LEFT ROTATIONS
+        inc = abs(a[i]) % 100
+        #Cuts inc down to whatever partial rotation
+        dial -= inc
+        if dial % 100 == 0 or dial // 100 != prev // 100 and prev % 100 != 0:
+            total += 1
+        #Adds to total if current dial lands on 0, or if dial has passed 0 since prev (also prevents double counting landing on 0)
+        if i > len(a) - 10:
+            print(step, total, dial, prev, -inc)
+        if dial > 99:
+            dial -= 100
+        if dial < 0:
+            dial += 100
+    else:
+        inc = a[i] % 100
+        #Cuts inc down to whatever partial rotation
+        dial += inc
+        if dial % 100 == 0 or dial // 100 != prev // 100:
+            total += 1
+        #Adds to total if current dial lands on 0 etc etc
+        if i > len(a) - 10:
+            print(step, total, dial, prev, inc)
+        if dial > 99:
+            dial -= 100
+        if dial < 0:
+            dial += 100
+    prev = dial
