@@ -1,0 +1,138 @@
+#My method for part 1:
+
+#You know what this does by now
+file = open("aoc2025 day 4 input.txt")
+a = file.read()
+file.close()
+a = a.replace(".", "0 ")
+a = a.replace("@", "1 ")
+a = a.split("\n")
+for i in range(len(a)):
+    a[i] = a[i].split(" ")
+    a[i] = a[i][:int(len(a[i]) - 1)]
+    for j in range(len(a[i])):
+        a[i][j] = int(a[i][j])
+
+#Goes into each row of the input, with three cases: corner, edge, and bulk. Uses a list instead of simply adding 1 to a running total to avoid double counting; I'm not sure why, but with the running total my final answer was about 20 rolls higher, and this was easier than debugging that. 
+#Corner: adds the roll's coordinates to a list if there's a roll there, since there can be at most 3 adjacent rolls.
+#Edge: looks at the slots on either side along the edge, as well as the three slots closer to the center; adds coordinates if there are < 4 rolls in these five slots.
+#Bulk: similar logic for edge, but on all sides
+rolls = []
+for i in range(len(a)):
+    for j in range(len(a[i])):
+        if a[i][j] == 1:
+            #Top edge
+            if i == 0:
+                #Top left and top right corners
+                if j == 0 or j == len(a[i]) - 1 and [i, j] not in rolls:
+                    rolls.append([i, j])
+                #Top edge but not in the corner
+                else:
+                    adj = a[i][j-1] + a[i][j+1] + a[i+1][j-1] + a[i+1][j] + a[i+1][j+1]
+                    if adj < 4 and [i, j] not in rolls:
+                        rolls.append([i, j])
+            #Bottom edge          
+            if i == len(a) - 1:
+                #Bottom left and bottom right corners
+                if j == 0 or j == len(a[i]) - 1 and [i, j] not in rolls:
+                    rolls.append([i, j])
+                #Bottom edge but not in the corner
+                else:
+                    adj = a[i][j-1] + a[i][j+1] + a[i-1][j-1] + a[i-1][j] + a[i-1][j+1]
+                    if adj < 4 and [i, j] not in rolls:
+                        rolls.append([i, j])
+            #In between
+            else:
+                #Left edge
+                    if j == 0:
+                        adj = a[i-1][j] + a[i-1][j+1] + a[i][j+1] + a[i+1][j] + a[i+1][j+1]
+                        if adj < 4 and [i, j] not in rolls:
+                            rolls.append([i, j])
+                #Right edge
+                    if j == len(a[i]) - 1:
+                        adj = a[i-1][j] + a[i-1][j-1] + a[i][j-1] + a[i+1][j] + a[i+1][j-1]
+                        if adj < 4 and [i, j] not in rolls:
+                            rolls.append([i, j])
+                #In between
+                    else:
+                        adj = a[i-1][j-1] + a[i-1][j] + a[i-1][j+1] + a[i][j-1] + a[i][j+1] + a[i+1][j-1] + a[i+1][j] + a[i+1][j+1]
+                        if adj < 4 and [i, j] not in rolls:
+                            rolls.append([i, j])
+
+print(len(rolls))
+
+
+#My method for part 2:
+#There was a span of about 4 days in between when I finished this and when I added it to github, and I left a comment to myself reading "UPDATE COMMENTS BEFORE PUBLISHING!!! specifially the one explaining corner/edge/bulk logic." I have no idea what I wanted to update, since it's the same logic as before, but whatever.
+
+#You know what this does by now
+file = open("aoc2025 day 4 input.txt")
+a = file.read()
+file.close()
+a = a.replace(".", "0 ")
+a = a.replace("@", "1 ")
+a = a.split("\n")
+for i in range(len(a)):
+    a[i] = a[i].split(" ")
+    a[i] = a[i][:int(len(a[i]) - 1)]
+    for j in range(len(a[i])):
+        a[i][j] = int(a[i][j])
+
+#Goes into each row of the input, with three cases: corner, edge, and bulk. Uses a list instead of simply adding 1 to a running total to avoid double counting; I'm not sure why, but with the running total my final answer was about 20 rolls higher, and this was easier than debugging that. 
+#Corner: adds the roll's coordinates to a list if there's a roll there, since there can be at most 3 adjacent rolls.
+#Edge: looks at the slots on either side along the edge, as well as the three slots closer to the center; adds coordinates if there are < 4 rolls in these five slots.
+#Bulk: similar logic for edge, but on all sides
+total = 0
+prev = 1
+while prev != 0:
+    rolls = []
+    for i in range(len(a)):
+        for j in range(len(a[i])):
+            if a[i][j] == 1:
+                #Top edge
+                if i == 0:
+                    #Top left and top right corners
+                    if j == 0 or j == len(a[i]) - 1 and [i, j] not in rolls:
+                        rolls.append([i, j])
+                    #Top edge but not in the corner
+                    else:
+                        adj = a[i][j-1] + a[i][j+1] + a[i+1][j-1] + a[i+1][j] + a[i+1][j+1]
+                        if adj < 4 and [i, j] not in rolls:
+                            rolls.append([i, j])
+                #Bottom edge          
+                if i == len(a) - 1:
+                    #Bottom left and bottom right corners
+                    if j == 0 or j == len(a[i]) - 1 and [i, j] not in rolls:
+                        rolls.append([i, j])
+                    #Bottom edge but not in the corner
+                    else:
+                        adj = a[i][j-1] + a[i][j+1] + a[i-1][j-1] + a[i-1][j] + a[i-1][j+1]
+                        if adj < 4 and [i, j] not in rolls:
+                            rolls.append([i, j])
+                #In between
+                else:
+                    #Left edge
+                        if j == 0:
+                            adj = a[i-1][j] + a[i-1][j+1] + a[i][j+1] + a[i+1][j] + a[i+1][j+1]
+                            if adj < 4 and [i, j] not in rolls:
+                                rolls.append([i, j])
+                    #Right edge
+                        if j == len(a[i]) - 1:
+                            adj = a[i-1][j] + a[i-1][j-1] + a[i][j-1] + a[i+1][j] + a[i+1][j-1]
+                            if adj < 4 and [i, j] not in rolls:
+                                rolls.append([i, j])
+                    #In between
+                        else:
+                            adj = a[i-1][j-1] + a[i-1][j] + a[i-1][j+1] + a[i][j-1] + a[i][j+1] + a[i+1][j-1] + a[i+1][j] + a[i+1][j+1]
+                            if adj < 4 and [i, j] not in rolls:
+                                rolls.append([i, j])
+                                
+    #Goes through the list of removable rolls, and sets them all equal to 0. Adds the number of removed rolls to the total.
+    for i in range(len(a)):
+        for j in range(len(a[i])):
+            if [i, j] in rolls:
+                a[i][j] = 0
+    prev = len(rolls)
+    total += prev
+
+print(total)
