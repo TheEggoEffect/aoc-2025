@@ -1,0 +1,78 @@
+#My method for part 1:
+
+#You know what this does
+file = open("aoc2025 day 5 input.txt")
+a = file.read()
+file.close()
+a = a.split("\n\n")
+
+#Creates a list of ranges and a list of IDs to check
+b = a[0]
+b = b.split("\n")
+for i in range(len(b)):
+    b[i] = b[i].split("-")
+    for j in range(len(b[i])):
+        b[i][j] = int(b[i][j])
+c = a[1]
+c = c.split("\n")
+for i in range(len(c)):
+    c[i] = int(c[i])
+
+#For each ID, checks if the ID falls within one of the ranges; if so, adds 1 to a running total
+total = 0
+for i in range(len(c)):
+    for j in range(len(b)):
+        if b[j][0] <= c[i] <= b[j][1]:
+            total += 1
+            break
+
+print(total)
+
+
+#My method for part 2:
+
+#You know what this does
+file = open("aoc2025 day 5 input.txt")
+inp = file.read()
+file.close()
+inp = inp.split("\n\n")
+
+#Creates a list of ranges
+ranges = inp[0]
+ranges = ranges.split("\n")
+for i in range(len(ranges)):
+    ranges[i] = ranges[i].split("-")
+    for j in range(len(ranges[i])):
+        ranges[i][j] = int(ranges[i][j])
+
+#Checks each range against every other, and merges the two ranges if they overlap
+overlap = 1
+while overlap != 0:
+    overlap = 0
+    for i in ranges:
+        for j in ranges:
+            if i != j:
+                lows = [i[0], j[0]]
+                highs = [i[1], j[1]]
+                #if part of range 2 is contained in range 1:
+                if lows[0] <= lows[1] <= highs[0] or lows[0] <= highs[1] <= highs[0] or lows[1] <= lows[0] <= highs[1] or lows[1] <= highs[0] <= highs[1]:
+                    overlap += 1
+                    mini = min(lows)
+                    maxi = max(highs)
+                    ranges.append([mini, maxi])
+                    ranges.remove(i)
+                    ranges.remove(j)
+                    break
+
+#Removes any double counts missed by the previous section (idk why they're there nor how to remove them, it's almost 2 am and I don't care)
+clean = []
+for i in ranges:
+    if i not in clean:
+        clean.append(i)
+        
+#Adds the number of IDs in each range to a running total
+total = 0
+for i in clean:
+    total += i[1] - i[0] + 1
+
+print(total)
