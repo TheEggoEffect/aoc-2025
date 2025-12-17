@@ -1,0 +1,81 @@
+#My method for part 1:
+
+#You know what this does
+file = open("aoc2025 day 7 test.txt")
+inp = file.read()
+file.close()
+inp = inp.split("\n")
+for i in range(len(inp)):
+    row = []
+    for j in inp[i]:
+        row.append(j)
+    inp[i] = row
+
+#Propogates beams downwards from earlier beams and the source. Splits beams if the beam encounters a splitter, and adds to the total. 
+splits = 0
+for i in range(len(inp) - 1):
+    for j in range(len(inp[i])):
+        if inp[i][j] == "|" and inp[i+1][j] == ".":
+            inp[i+1][j] = "|"
+        if inp[i][j] == "S":
+            inp[i+1][j] = "|"
+        if inp[i][j] == "^" and inp[i-1][j] == "|":
+            inp[i][j-1] = "|"
+            inp[i][j+1] = "|"
+            inp[i+1][j-1] = "|"
+            inp[i+1][j+1] = "|"
+            splits += 1
+
+
+#My method for part 2:
+
+#You know what this does
+file = open("aoc2025 day 7 input.txt")
+inp = file.read()
+file.close()
+inp = inp.split("\n")
+for i in range(len(inp)):
+    row = []
+    for j in inp[i]:
+        row.append(j)
+    inp[i] = row
+
+#Propogates beams downwards from earlier beams and the source, splitting the beam if it encounters a splitter
+for i in range(len(inp) - 1):
+    for j in range(len(inp[i])):
+        if inp[i][j] == "|" and inp[i+1][j] == ".":
+            inp[i+1][j] = "|"
+        if inp[i][j] == "S":
+            inp[i+1][j] = "|"
+        if inp[i][j] == "^" and inp[i-1][j] == "|":
+            inp[i][j-1] = "|"
+            inp[i][j+1] = "|"
+            inp[i+1][j-1] = "|"
+            inp[i+1][j+1] = "|"
+
+#Runs through the input file with all propagated beams, keeping track of the number of ways a beam could reach a specific location
+tls = []
+row = []
+for i in range(len(inp)):
+    row = []
+    for j in range(len(inp[i])):
+        inc = 0
+        if inp[i][j] == "S":
+            row.append(1)
+        if inp[i][j] == "|":
+            if inp[i-1][j] == "|" or inp[i-1][j] == "S":
+                inc += tls[i-1][j]
+            if inp[i][j-1] == "^":
+                inc += tls[i-1][j-1]
+            if j < len(inp[i])-1 and inp[i][j+1] == "^":
+                inc += tls[i-1][j+1]
+            row.append(inc)
+        if inp[i][j] == "." or inp[i][j] == "^":
+            row.append(0)
+    tls.append(row)
+
+sum(tls[-1])
+
+
+
+print(splits)
